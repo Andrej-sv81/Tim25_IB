@@ -1,5 +1,7 @@
 package com.ib.Tim25_IB.model;
 
+import com.ib.Tim25_IB.DTOs.UserRequestDTO;
+
 public class User {
 
     private Long id;
@@ -19,6 +21,15 @@ public class User {
         this.lastname = lastname;
         this.phoneNumber = phoneNumber;
         this.password = password;
+    }
+
+    public User(Long id, UserRequestDTO request){
+        this.id = id;
+        this.email = request.getEmail();
+        this.name = request.getFirstName();
+        this.lastname = request.getLastName();
+        this.phoneNumber = request.getPhoneNumber();
+        this.password = request.getPassword();
     }
 
     public Long getId() {
