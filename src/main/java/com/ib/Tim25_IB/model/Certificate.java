@@ -1,4 +1,4 @@
-package model;
+package com.ib.Tim25_IB.model;
 
 import java.time.LocalDateTime;
 

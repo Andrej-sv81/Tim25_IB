@@ -1,4 +1,4 @@
-package model;
+package com.ib.Tim25_IB.model;
 
 public class User {
 
