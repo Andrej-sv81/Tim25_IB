@@ -3,7 +3,9 @@ package com.ib.Tim25_IB.services;
 import com.ib.Tim25_IB.DTOs.UserLoginRequestDTO;
 import com.ib.Tim25_IB.DTOs.UserRequestDTO;
 import com.ib.Tim25_IB.model.User;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserService {
 
     public User createUser(UserRequestDTO requestDTO){
