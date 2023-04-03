@@ -1,22 +1,35 @@
 package com.ib.Tim25_IB.services;
 
+import Repository.UserRepository;
 import com.ib.Tim25_IB.DTOs.UserLoginRequestDTO;
 import com.ib.Tim25_IB.DTOs.UserRequestDTO;
 import com.ib.Tim25_IB.model.User;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.List;
+
 @Service
 public class UserService {
 
-    public User createUser(UserRequestDTO requestDTO){
+    private UserRepository userRepository = new UserRepository();
+
+    public User createUser(UserRequestDTO requestDTO) throws IOException {
         User user = new User(1L, requestDTO);
-        // call repo to save
+        List<User> users = userRepository.getAllUsers();
+        users.add(user);
+        userRepository.save(users);
         return user;
     }
 
-    public boolean loginUser(UserLoginRequestDTO requestDTO){
-        //call repo to login
-        return true;
+    public boolean loginUser(UserLoginRequestDTO requestDTO) throws IOException {
+        List<User> users = userRepository.getAllUsers();
+        for (User user : users){
+            if(user.getEmail().equals(requestDTO.getEmail()) && user.getPassword().equals(requestDTO.getPassword())){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void getRequests() {

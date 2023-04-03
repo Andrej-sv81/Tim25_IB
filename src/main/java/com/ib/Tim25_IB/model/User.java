@@ -10,26 +10,29 @@ public class User {
     private String lastname;
     private String phoneNumber;
     private String password;
+    private boolean isAdmin;
 
     public User() {
     }
 
-    public User(Long id, String email, String name, String lastname, String phoneNumber, String password) {
+    public User(Long id, String email, String name, String lastname, String phoneNumber, String password,boolean isAdmin) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.lastname = lastname;
         this.phoneNumber = phoneNumber;
         this.password = password;
+        this.isAdmin = isAdmin;
     }
 
     public User(Long id, UserRequestDTO request){
         this.id = id;
         this.email = request.getEmail();
-        this.name = request.getFirstName();
-        this.lastname = request.getLastName();
+        this.name = request.getName();
+        this.lastname = request.getLastname();
         this.phoneNumber = request.getPhoneNumber();
         this.password = request.getPassword();
+        this.isAdmin = false;
     }
 
     public Long getId() {
@@ -78,5 +81,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 }

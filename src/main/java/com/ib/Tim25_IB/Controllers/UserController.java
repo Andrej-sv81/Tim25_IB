@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
 import java.awt.image.RescaleOp;
+import java.io.IOException;
 import java.net.http.HttpResponse;
 
 @RestController
@@ -21,17 +22,19 @@ public class UserController {
     UserService userService;
     //REGISTER A NEW USER
     @PostMapping(value="/register",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> registerUser(@RequestBody UserRequestDTO request){
+    public ResponseEntity<?> registerUser(@RequestBody UserRequestDTO request) throws IOException {
 
         userService.createUser(request);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     //LOG IN AN EXISTING USER
     @PostMapping(value="/login",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> loginUser(@RequestBody UserLoginRequestDTO request){
+    public ResponseEntity<?> loginUser(@RequestBody UserLoginRequestDTO request) throws IOException {
 
-        userService.loginUser(request);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        boolean check = userService.loginUser(request);
+        if (check)
+            return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     //GET ALL THE ACTIVE AND PAST CERTIFICATE REQUESTS
     @GetMapping(value="/requests", produces = MediaType.APPLICATION_JSON_VALUE)
