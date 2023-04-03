@@ -16,13 +16,13 @@ import java.net.http.HttpResponse;
 @RequestMapping("api/user")
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    //@Autowired
+    //UserService userService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    /*@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> registerUser(@RequestBody UserRequestDTO){
         //Check if saved
         //call service method and save user to file
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+    }*/
 }
