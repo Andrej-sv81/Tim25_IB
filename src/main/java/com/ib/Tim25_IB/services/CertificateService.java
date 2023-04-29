@@ -8,7 +8,7 @@ import java.util.List;
 @Service
 public class CertificateService {
 
-    public CertificateListDTO getAll(){
+    public CertificateListDTO getAll() {
         List<CertificateDTO> certificateList = null; //get from repo
         CertificateListDTO returnList = new CertificateListDTO(certificateList.size(), certificateList);
         return returnList;
