@@ -2,6 +2,8 @@ package com.ib.Tim25_IB.Controllers;
 
 import com.ib.Tim25_IB.DTOs.CertificateDTO;
 import com.ib.Tim25_IB.DTOs.CertificateListDTO;
+import com.ib.Tim25_IB.model.Certificate;
+import com.ib.Tim25_IB.services.CertificateGenerator;
 import com.ib.Tim25_IB.services.CertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Media;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/certificate")
@@ -17,8 +20,6 @@ public class CertificateController {
 
     @Autowired
     CertificateService certificateService;
-
-
 
     @Autowired
     private CertificateGenerator certificateGenerator;
