@@ -1,6 +1,7 @@
 package com.ib.Tim25_IB.model;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Certificate {
 
@@ -8,25 +9,13 @@ public class Certificate {
     public String serialNumber;
     public String signatureAlgorithm;
     public String issuer;
-    public LocalDateTime validTo;
-    public LocalDateTime validFrom;
+    public Date validTo;
+    public Date validFrom;
     public CertificateStatus certificateStatus;
     public CertificateType certificateType;
     public String username;
 
     public Certificate() {
-    }
-
-    public Certificate(Long id, String serialNumber, String signatureAlgorithm, String issuer, LocalDateTime validTo, LocalDateTime validFrom, CertificateStatus certificateStatus, CertificateType certificateType, String username) {
-        this.id = id;
-        this.serialNumber = serialNumber;
-        this.signatureAlgorithm = signatureAlgorithm;
-        this.issuer = issuer;
-        this.validTo = validTo;
-        this.validFrom = validFrom;
-        this.certificateStatus = certificateStatus;
-        this.certificateType = certificateType;
-        this.username = username;
     }
 
     public Long getId() {
@@ -61,19 +50,19 @@ public class Certificate {
         this.issuer = issuer;
     }
 
-    public LocalDateTime getValidTo() {
+    public Date getValidTo() {
         return validTo;
     }
 
-    public void setValidTo(LocalDateTime validTo) {
+    public void setValidTo(Date validTo) {
         this.validTo = validTo;
     }
 
-    public LocalDateTime getValidFrom() {
+    public Date getValidFrom() {
         return validFrom;
     }
 
-    public void setValidFrom(LocalDateTime validFrom) {
+    public void setValidFrom(Date validFrom) {
         this.validFrom = validFrom;
     }
 
@@ -81,16 +70,16 @@ public class Certificate {
         return certificateStatus;
     }
 
-    public void setCertificateStatus(CertificateStatus certificateStatus) {
-        this.certificateStatus = certificateStatus;
+    public void setCertificateStatus(CertificateStatus status) {
+        this.certificateStatus = status;
     }
 
     public CertificateType getCertificateType() {
         return certificateType;
     }
 
-    public void setCertificateType(CertificateType certificateType) {
-        this.certificateType = certificateType;
+    public void setCertificateType(CertificateType type) {
+        this.certificateType = type;
     }
 
     public String getUsername() {

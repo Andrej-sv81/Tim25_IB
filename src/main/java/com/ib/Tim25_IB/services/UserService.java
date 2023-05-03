@@ -25,7 +25,7 @@ public class UserService {
     public boolean loginUser(UserLoginRequestDTO requestDTO) throws IOException {
         List<User> users = userRepository.getAllUsers();
         for (User user : users){
-            if(user.getEmail().equals(requestDTO.getEmail()) && user.getPassword().equals(requestDTO.getPassword())){
+            if(user.getUsername().equals(requestDTO.getEmail()) && user.getPassword().equals(requestDTO.getPassword())){
                 return true;
             }
         }
