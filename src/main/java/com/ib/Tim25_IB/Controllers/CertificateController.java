@@ -17,6 +17,28 @@ public class CertificateController {
 
     @Autowired
     CertificateService certificateService;
+
+
+
+    @Autowired
+    private CertificateGenerator certificateGenerator;
+
+    @PostMapping
+    public ResponseEntity<Certificate> issueCertificate(@RequestBody CertificateRequest request) {
+        try {
+            Certificate certificate = certificateGenerator.issueCertificate(
+                    request.getIssuerSN(),
+                    request.getSubjectUsername(),
+                    request.getKeyUsageFlags(),
+                    LocalDateTime.parse(request.getValidTo())
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body(certificate);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
     // RETURN ALL CERTIFICATES
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAll(){
