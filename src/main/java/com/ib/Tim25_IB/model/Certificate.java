@@ -1,6 +1,5 @@
 package com.ib.Tim25_IB.model;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Certificate {

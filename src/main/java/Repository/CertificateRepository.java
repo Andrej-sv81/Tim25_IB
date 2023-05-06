@@ -2,7 +2,6 @@ package Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ib.Tim25_IB.Controllers.CertificateController;
 import com.ib.Tim25_IB.model.Certificate;
 import org.springframework.stereotype.Repository;
 
