@@ -1,6 +1,6 @@
 package com.ib.Tim25_IB.services;
 
-import Repository.UserRepository;
+import com.ib.Tim25_IB.Repository.UserRepository;
 import com.ib.Tim25_IB.DTOs.UserLoginRequestDTO;
 import com.ib.Tim25_IB.DTOs.UserRequestDTO;
 import com.ib.Tim25_IB.model.User;

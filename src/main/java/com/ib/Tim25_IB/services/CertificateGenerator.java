@@ -1,7 +1,7 @@
 package com.ib.Tim25_IB.services;
 
-import Repository.CertificateRepository;
-import Repository.UserRepository;
+import com.ib.Tim25_IB.Repository.CertificateRepository;
+import com.ib.Tim25_IB.Repository.UserRepository;
 import com.ib.Tim25_IB.model.Certificate;
 import com.ib.Tim25_IB.model.CertificateStatus;
 import com.ib.Tim25_IB.model.CertificateType;

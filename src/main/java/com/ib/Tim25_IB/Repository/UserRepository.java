@@ -1,4 +1,4 @@
-package Repository;
+package com.ib.Tim25_IB.Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
