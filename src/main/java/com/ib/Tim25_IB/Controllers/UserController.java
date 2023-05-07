@@ -26,7 +26,6 @@ public class UserController {
     //LOG IN AN EXISTING USER
     @PostMapping(value="/login",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> loginUser(@RequestBody UserLoginRequestDTO request) throws IOException {
-
         boolean check = userService.loginUser(request);
         if (check)
             return new ResponseEntity<>(HttpStatus.OK);
