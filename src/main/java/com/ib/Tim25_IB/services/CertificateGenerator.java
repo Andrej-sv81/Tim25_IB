@@ -107,7 +107,7 @@ public class CertificateGenerator {
         }
         this.validTo = Date.from(validTo.atZone(ZoneId.systemDefault()).toInstant());
 
-        subject = userRepository.findByUsername(subjectUsername);
+        subject = userRepository.findByEmail(subjectUsername);
         keyUsage = parseFlags(keyUsageFlags);
     }
 
