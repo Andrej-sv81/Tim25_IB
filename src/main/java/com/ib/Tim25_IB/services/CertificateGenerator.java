@@ -71,7 +71,7 @@ public class CertificateGenerator {
                 : CertificateType.END);
         certificateForDb.setSerialNumber(cert.getSerialNumber().toString());
         certificateForDb.setSignatureAlgorithm(cert.getSigAlgName());
-        certificateForDb.setUsername(subject.getUsername());
+        certificateForDb.setUsername(subject.getEmail());
         certificateForDb.setValidFrom(cert.getNotBefore());
         certificateForDb.setValidTo(cert.getNotAfter());
 
@@ -91,7 +91,6 @@ public class CertificateGenerator {
         if (issuerSN != null && !issuerSN.isEmpty()) {
             issuer = certificateRepository.findBySerialNumber(issuerSN);
             issuerCertificate = (X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(Files.newInputStream(new File(CERT_DIR, issuerSN + ".crt").toPath()));
-
             byte[] privateKeyBytes = Files.readAllBytes(new File(CERT_DIR, issuerSN + ".key").toPath());
             PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
@@ -113,7 +112,7 @@ public class CertificateGenerator {
     }
 
     private X509Certificate generateCertificate() throws NoSuchAlgorithmException, OperatorCreationException, CertificateException, IOException {
-        X500Name subjectText = new X500Name("CN=" + subject.getUsername());
+        X500Name subjectText = new X500Name("CN=" + subject.getEmail());
         currentKeyPair = generateKeyPair(4096);
 
         X509v3CertificateBuilder certificateBuilder = new JcaX509v3CertificateBuilder(

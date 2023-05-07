@@ -4,6 +4,7 @@ import com.ib.Tim25_IB.Repository.UserRepository;
 import com.ib.Tim25_IB.DTOs.UserLoginRequestDTO;
 import com.ib.Tim25_IB.DTOs.UserRequestDTO;
 import com.ib.Tim25_IB.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -11,8 +12,8 @@ import java.util.List;
 
 @Service
 public class UserService {
-
-    private UserRepository userRepository = new UserRepository();
+    @Autowired
+    private UserRepository userRepository;
 
     public User createUser(UserRequestDTO requestDTO) throws IOException {
         User user = new User(1L, requestDTO);
@@ -25,7 +26,7 @@ public class UserService {
     public boolean loginUser(UserLoginRequestDTO requestDTO) throws IOException {
         List<User> users = userRepository.getAllUsers();
         for (User user : users){
-            if(user.getUsername().equals(requestDTO.getEmail()) && user.getPassword().equals(requestDTO.getPassword())){
+            if(user.getEmail().equals(requestDTO.getEmail()) && user.getPassword().equals(requestDTO.getPassword())){
                 return true;
             }
         }

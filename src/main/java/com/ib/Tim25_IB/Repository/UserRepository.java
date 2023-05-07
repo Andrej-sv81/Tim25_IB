@@ -31,7 +31,7 @@ public class UserRepository {
     public User findByUsername(String username) throws IOException{
         List<User> users = getAllUsers();
         for (User user: users) {
-            if (user.getUsername().equals(username)){
+            if (user.getEmail().equals(username)){
                 return user;
             }
         }

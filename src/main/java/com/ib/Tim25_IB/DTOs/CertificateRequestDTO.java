@@ -1,7 +1,7 @@
-package com.ib.Tim25_IB.Controllers;
+package com.ib.Tim25_IB.DTOs;
 
 
-public class CertificateRequest {
+public class CertificateRequestDTO {
     private String issuerSN;
     private String subjectUsername;
     private String keyUsageFlags;

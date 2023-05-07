@@ -5,7 +5,7 @@ import com.ib.Tim25_IB.DTOs.UserRequestDTO;
 public class User {
 
     private Long id;
-    private String username;
+    private String email;
     private String name;
     private String lastname;
     private String phoneNumber;
@@ -15,9 +15,9 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String username, String name, String lastname, String phoneNumber, String password,boolean isAdmin) {
+    public User(Long id, String email, String name, String lastname, String phoneNumber, String password,boolean isAdmin) {
         this.id = id;
-        this.username = username;
+        this.email = email;
         this.name = name;
         this.lastname = lastname;
         this.phoneNumber = phoneNumber;
@@ -27,7 +27,7 @@ public class User {
 
     public User(Long id, UserRequestDTO request){
         this.id = id;
-        this.username = request.getEmail();
+        this.email = request.getEmail();
         this.name = request.getName();
         this.lastname = request.getLastname();
         this.phoneNumber = request.getPhoneNumber();
@@ -43,12 +43,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String email) {
-        this.username = email;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getName() {
