@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Certificate {
 
-    private Long id;
+    private Long id; //TODO izbrisati id i srediti gdje se korisit
     public String serialNumber;
     public String signatureAlgorithm;
     public String issuer;
