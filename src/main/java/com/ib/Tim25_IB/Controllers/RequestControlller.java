@@ -1,11 +1,8 @@
 package com.ib.Tim25_IB.Controllers;
 
-import com.ib.Tim25_IB.DTOs.CertificateListDTO;
-import com.ib.Tim25_IB.DTOs.CertificateRequestDTO;
+import com.ib.Tim25_IB.DTOs.*;
 import com.ib.Tim25_IB.model.Certificate;
-import com.ib.Tim25_IB.services.CertificateGenerator
-import com.ib.Tim25_IB.DTOs.EmailDTO;
-import com.ib.Tim25_IB.DTOs.RequestListDTO;
+import com.ib.Tim25_IB.services.CertificateGenerator;
 import com.ib.Tim25_IB.model.Certificate;
 import com.ib.Tim25_IB.model.CertificateRequest;
 import com.ib.Tim25_IB.services.CertificateService;
@@ -24,10 +21,9 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/request")
 public class RequestControlller {
     @Autowired
-    RequestService requestService;
+    private RequestService requestService;
     @Autowired
-    CertificateService certificateService;
-
+    private CertificateService certificateService;
     @Autowired
     private CertificateGenerator certificateGenerator;
     @Autowired
@@ -55,7 +51,7 @@ public class RequestControlller {
             );
         }
 
-        if(request.getSubjectUsername() == certificateService.getOne(request.getIssuerSN()).getIssuer()){
+        if(request.getSubjectUsername().equals(certificateService.getOne(request.getIssuerSN()).getIssuer())){
             Certificate certificate = certificateGenerator.issueCertificate(
                     request.getIssuerSN(),
                     request.getSubjectUsername(),
@@ -63,13 +59,14 @@ public class RequestControlller {
                     LocalDateTime.parse(request.getValidTo())
             );
         }
-
-        requestService.createCertificateRequest(request);
+        if(!userService.isUserAdmin(request.getSubjectUsername()) && !request.getSubjectUsername().equals(certificateService.getOne(request.getIssuerSN()).getIssuer())) {
+            requestService.createCertificateRequest(request);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //GET ALL THE ACTIVE AND PAST CERTIFICATE REQUESTS
-    @PostMapping(value="/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getRequests(@RequestBody EmailDTO email){
         RequestListDTO list = requestService.getAll(email.getEmail());
         if(list != null){
@@ -77,12 +74,17 @@ public class RequestControlller {
         }else{
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
     }
     //ACCEPT/DENY REQUEST
     @PutMapping(value="/respond")
-    public ResponseEntity<?> processRequest(){
-//        userService.processCertificate();
-        return  new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<CertificateRequest> processRequest(@RequestBody RequestStatusChange requestStatusChange){
+        CertificateRequest certificateRequest = new CertificateRequest();
+        if(requestStatusChange.getStatusChange().equals("DENIED")){
+            certificateRequest = requestService.denyCertificateRequest(requestStatusChange.getId());
+        }
+        if(requestStatusChange.getStatusChange().equals("ACCEPTED")){
+            certificateRequest = requestService.acceptCertificateRequest(requestStatusChange.getId());
+        }
+        return  new ResponseEntity<>(certificateRequest,HttpStatus.OK);
     }
 }

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RequestService {
@@ -31,6 +32,28 @@ public class RequestService {
 
         requestRepository.save(request);
         requestRepository.flush();
+    }
+
+    public CertificateRequest denyCertificateRequest(Long id){
+        Optional<CertificateRequest> certificateRequestOptional = requestRepository.findById(id);
+        if(certificateRequestOptional.isPresent()){
+            CertificateRequest certificateRequest = certificateRequestOptional.get();
+            certificateRequest.setStatus(RequestStatus.DENIED);
+            requestRepository.save(certificateRequest);
+            return certificateRequest;
+        }
+        return null;
+    }
+
+    public CertificateRequest acceptCertificateRequest(Long id){
+        Optional<CertificateRequest> certificateRequestOptional = requestRepository.findById(id);
+        if(certificateRequestOptional.isPresent()){
+            CertificateRequest certificateRequest = certificateRequestOptional.get();
+            certificateRequest.setStatus(RequestStatus.ACCEPTED);
+            requestRepository.save(certificateRequest);
+            return certificateRequest;
+        }
+        return null;
     }
 
     public RequestListDTO getAll(String email) {
