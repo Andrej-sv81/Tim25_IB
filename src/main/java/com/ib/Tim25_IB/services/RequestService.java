@@ -1,6 +1,8 @@
 package com.ib.Tim25_IB.services;
 
 import com.ib.Tim25_IB.DTOs.CertificateRequestDTO;
+import com.ib.Tim25_IB.DTOs.EmailDTO;
+import com.ib.Tim25_IB.DTOs.RequestListDTO;
 import com.ib.Tim25_IB.Repository.RequestRepository;
 import com.ib.Tim25_IB.model.CertificateRequest;
 import com.ib.Tim25_IB.model.RequestStatus;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class RequestService {
@@ -28,5 +31,14 @@ public class RequestService {
 
         requestRepository.save(request);
         requestRepository.flush();
+    }
+
+    public RequestListDTO getAll(String email) {
+        List<CertificateRequest> requestList = requestRepository.findAllBySubjectUsername(email);
+        if(requestList != null){
+            return new RequestListDTO(requestList.size(), requestList);
+        }else{
+            return null;
+        }
     }
 }

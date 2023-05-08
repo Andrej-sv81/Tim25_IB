@@ -1,9 +1,6 @@
 package com.ib.Tim25_IB.Controllers;
 
-import com.ib.Tim25_IB.DTOs.CertificateDTO;
-import com.ib.Tim25_IB.DTOs.CertificateListDTO;
-import com.ib.Tim25_IB.DTOs.CertificateRequestDTO;
-import com.ib.Tim25_IB.DTOs.RootCertifaceDTO;
+import com.ib.Tim25_IB.DTOs.*;
 import com.ib.Tim25_IB.model.Certificate;
 import com.ib.Tim25_IB.services.CertificateGenerator;
 import com.ib.Tim25_IB.services.CertificateService;
@@ -69,9 +66,9 @@ public class CertificateController {
 
     // VALIDATE A CERTIFICATE WITH ITS ID
     @PostMapping(value = "/validate", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> validateCertificate(@RequestParam Long id){
-    certificateService.validateCertificate(id);
-    return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Boolean> validateCertificate(@RequestBody CertIdDTO id){
+        boolean valid = certificateService.validateCertificate(id.getSerialNumber());
+        return new ResponseEntity<Boolean>(valid, HttpStatus.OK);
     }
 
 }
