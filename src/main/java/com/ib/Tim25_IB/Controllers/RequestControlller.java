@@ -2,6 +2,10 @@ package com.ib.Tim25_IB.Controllers;
 
 import com.ib.Tim25_IB.DTOs.CertificateListDTO;
 import com.ib.Tim25_IB.DTOs.CertificateRequestDTO;
+import com.ib.Tim25_IB.DTOs.EmailDTO;
+import com.ib.Tim25_IB.DTOs.RequestListDTO;
+import com.ib.Tim25_IB.model.Certificate;
+import com.ib.Tim25_IB.model.CertificateRequest;
 import com.ib.Tim25_IB.services.CertificateService;
 import com.ib.Tim25_IB.services.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/request")
@@ -26,10 +32,15 @@ public class RequestControlller {
     }
 
     //GET ALL THE ACTIVE AND PAST CERTIFICATE REQUESTS
-    @GetMapping(value="/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getRequests(){
-//        userService.getRequests();
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping(value="/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getRequests(@RequestBody EmailDTO email){
+        RequestListDTO list = requestService.getAll(email.getEmail());
+        if(list != null){
+            return new ResponseEntity<RequestListDTO>(list, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
     }
     //ACCEPT/DENY REQUEST
     @PutMapping(value="/respond")
