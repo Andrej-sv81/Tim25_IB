@@ -17,8 +17,7 @@ import java.util.List;
 @Service
 public class CertificateService {
 
-    @Autowired
-    RequestRepository requestRepository;
+
 
     public CertificateListDTO getAll(){
         List<CertificateDTO> certificateList = null; //get from repo
@@ -28,18 +27,8 @@ public class CertificateService {
 
     public void validateCertificate(Long id) {
         //call repo to validate
+        //get the valid state of the cert with the matching id
     }
 
-    public void createCertificateRequest(CertificateRequestDTO requestDTO) {
-        CertificateRequest request = new CertificateRequest();
-        request.setStatus(RequestStatus.PENDING);
-        request.setIssuerSN(requestDTO.getIssuerSN());
-        request.setSubjectUsername(requestDTO.getSubjectUsername());
-        request.setKeyUsageFlags(requestDTO.getKeyUsageFlags());
-        request.setValidTo(Date.from(LocalDateTime.parse(requestDTO.getValidTo()).atZone(ZoneId.systemDefault()).toInstant()));
-        request.setStatusDeniedMessage("No message");
 
-        requestRepository.save(request);
-        requestRepository.flush();
-    }
 }

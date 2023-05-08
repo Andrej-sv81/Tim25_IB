@@ -31,17 +31,5 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    //GET ALL THE ACTIVE AND PAST CERTIFICATE REQUESTS
-    @GetMapping(value="/requests", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getRequests(){
-        userService.getRequests();
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-    //ACCEPT/DENY REQUEST
-    @PutMapping(value="/respond")
-    public ResponseEntity<?> processRequest(){
-        userService.processCertificate();
-        return  new ResponseEntity<>(HttpStatus.OK);
-    }
 
 }

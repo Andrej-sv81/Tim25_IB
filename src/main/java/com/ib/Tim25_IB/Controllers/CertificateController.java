@@ -55,12 +55,4 @@ public class CertificateController {
     return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //CREATE A REQUEST FOR A NEWWW CERTIFICATE
-    //if the base cert for the new cert has the same user or if the user is an admin -> auto accept
-    //else create a cert request
-    @PostMapping(value="/request", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createCertificateRequest(@RequestBody CertificateRequestDTO request){
-        certificateService.createCertificateRequest(request);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }
