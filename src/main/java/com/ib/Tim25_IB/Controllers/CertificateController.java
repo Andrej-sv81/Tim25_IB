@@ -13,7 +13,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/certificate")
@@ -42,6 +44,13 @@ public class CertificateController {
         }
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Certificate>> getCertificates() throws IOException {
+        List<Certificate> certificates = certificateService.getAll();
+        return ResponseEntity.status(HttpStatus.OK).body(certificates);
+    }
+
+
     @PostMapping("/root")
     public ResponseEntity<Certificate> rootCertificate(@RequestBody RootCertifaceDTO request) {
 
@@ -57,13 +66,6 @@ public class CertificateController {
         }
     }
 
-    // RETURN ALL CERTIFICATES
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAll(){
-        //return list of Certificates
-        CertificateListDTO certList = certificateService.getAll();
-        return new ResponseEntity<CertificateListDTO>(certList, HttpStatus.OK);
-    }
 
     // VALIDATE A CERTIFICATE WITH ITS ID
     @PostMapping(value = "/validate", consumes = MediaType.APPLICATION_JSON_VALUE)

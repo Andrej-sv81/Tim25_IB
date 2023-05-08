@@ -41,6 +41,10 @@ public class UserService {
         }
     }
 
+    public boolean isUserAdmin(String email){
+        return userRepository.findByEmail(email).isAdmin();
+    }
+
     public void getRequests() {
     }
 
