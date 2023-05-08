@@ -16,7 +16,7 @@ public class CertificateRepository {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public List<Certificate> getAllCertificates() throws IOException {
-        File file = new File("certificate.json");
+        File file = new File("./src/main/resources/certificate.json");
         if (!file.exists()) {
             return new ArrayList<>();
         }
@@ -24,14 +24,14 @@ public class CertificateRepository {
     }
 
     public void save(Certificate certificate) throws IOException {
-        File file = new File("certificate.json");
+        File file = new File("./src/main/resources/certificate.json");
         List<Certificate> certificates = getAllCertificates();
         certificates.add(certificate);
         objectMapper.writeValue(file, certificates);
     }
 
     public void saveAll(List<Certificate> certificates) throws IOException {
-        File file = new File("certificate.json");
+        File file = new File("./src/main/resources/certificate.json");
         objectMapper.writeValue(file, certificates);
     }
 

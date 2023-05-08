@@ -26,6 +26,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.*;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
@@ -45,7 +47,7 @@ public class CertificateGenerator {
     @Autowired
     private CertificateRepository certificateRepository;
 
-    private static final String CERT_DIR = "certs";
+    private static final String CERT_DIR = "src/main/resources/certs";
 
     private Certificate issuer;
     private User subject;
@@ -57,6 +59,16 @@ public class CertificateGenerator {
 
     public Certificate issueCertificate(String issuerSN, String subjectUsername, String keyUsageFlags, LocalDateTime validTo) throws Exception {
         validate(issuerSN, subjectUsername, keyUsageFlags, validTo);
+        X509Certificate cert = generateCertificate();
+
+        return exportGeneratedCertificate(cert);
+    }
+
+    public Certificate rootIssueCertificate(String subjectUsername, String keyUsageFlags, LocalDateTime validTo) throws Exception {
+        validateRoot( subjectUsername, keyUsageFlags, validTo);
+
+        this.isAuthority = true;
+        this.issuerCertificate = null;
         X509Certificate cert = generateCertificate();
 
         return exportGeneratedCertificate(cert);
@@ -77,6 +89,16 @@ public class CertificateGenerator {
 
         certificateRepository.save(certificateForDb);
 
+        Path certDirPath = Paths.get(CERT_DIR);
+        if (!Files.exists(certDirPath)) {
+            Files.createDirectories(certDirPath);
+        }
+
+        Path certFilePath = certDirPath.resolve(certificateForDb.getSerialNumber() + ".crt");
+        if (!Files.exists(certFilePath)) {
+            Files.createFile(certFilePath);
+        }
+
         Files.write(new File(CERT_DIR, certificateForDb.getSerialNumber() + ".crt").toPath(), cert.getEncoded());
         try (FileOutputStream fos = new FileOutputStream(new File(CERT_DIR, certificateForDb.getSerialNumber() + ".key"))) {
             fos.write(currentKeyPair.getPrivate().getEncoded());
@@ -86,6 +108,16 @@ public class CertificateGenerator {
     }
 
     private PrivateKey issuerPrivateKey;
+
+    private void validateRoot(String subjectUsername, String keyUsageFlags, LocalDateTime validTo) throws Exception {
+
+        Date currentDate = new Date();
+        this.validTo = Date.from(validTo.atZone(ZoneId.systemDefault()).toInstant());
+
+        subject = userRepository.findByEmail(subjectUsername);
+        keyUsage = parseFlags(keyUsageFlags);
+    }
+
 
     private void validate(String issuerSN, String subjectUsername, String keyUsageFlags, LocalDateTime validTo) throws Exception {
         if (issuerSN != null && !issuerSN.isEmpty()) {
@@ -109,6 +141,7 @@ public class CertificateGenerator {
 
         subject = userRepository.findByEmail(subjectUsername);
         keyUsage = parseFlags(keyUsageFlags);
+        this.isAuthority = subject.isAdmin();
     }
 
     private X509Certificate generateCertificate() throws NoSuchAlgorithmException, OperatorCreationException, CertificateException, IOException {

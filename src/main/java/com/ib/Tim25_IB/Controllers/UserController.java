@@ -23,6 +23,14 @@ public class UserController {
         userService.createUser(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping(value="/register/admin",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> registerAdmin(@RequestBody UserRequestDTO request) throws IOException {
+
+        userService.createAdmin(request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     //LOG IN AN EXISTING USER
     @PostMapping(value="/login",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> loginUser(@RequestBody UserLoginRequestDTO request) throws IOException {

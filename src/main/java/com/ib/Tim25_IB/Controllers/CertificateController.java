@@ -3,6 +3,7 @@ package com.ib.Tim25_IB.Controllers;
 import com.ib.Tim25_IB.DTOs.CertificateDTO;
 import com.ib.Tim25_IB.DTOs.CertificateListDTO;
 import com.ib.Tim25_IB.DTOs.CertificateRequestDTO;
+import com.ib.Tim25_IB.DTOs.RootCertifaceDTO;
 import com.ib.Tim25_IB.model.Certificate;
 import com.ib.Tim25_IB.services.CertificateGenerator;
 import com.ib.Tim25_IB.services.CertificateService;
@@ -26,6 +27,7 @@ public class CertificateController {
 
     @PostMapping
     public ResponseEntity<Certificate> issueCertificate(@RequestBody CertificateRequestDTO request) {
+
         try {
             Certificate certificate = certificateGenerator.issueCertificate(
                     request.getIssuerSN(),
@@ -35,10 +37,25 @@ public class CertificateController {
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(certificate);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+    @PostMapping("/root")
+    public ResponseEntity<Certificate> rootCertificate(@RequestBody RootCertifaceDTO request) {
+
+        try {
+            Certificate certificate = certificateGenerator.rootIssueCertificate(
+                    request.getSubjectUsername(),
+                    request.getKeyUsageFlags(),
+                    LocalDateTime.parse(request.getValidTo())
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body(certificate);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     // RETURN ALL CERTIFICATES
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

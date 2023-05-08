@@ -25,6 +25,13 @@ public class UserService {
         userRepository.flush();
     }
 
+    public void createAdmin(UserRequestDTO requestDTO) throws IOException {
+        User user = new User(requestDTO);
+        user.setAdmin(true);
+        userRepository.save(user);
+        userRepository.flush();
+    }
+
     public boolean loginUser(UserLoginRequestDTO requestDTO) throws IOException {
         Optional<User> found = Optional.ofNullable(userRepository.findByEmail(requestDTO.getEmail()));
         if(found.isPresent() && found.get().getPassword().equals(requestDTO.getPassword())){
