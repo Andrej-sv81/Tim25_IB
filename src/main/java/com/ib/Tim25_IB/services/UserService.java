@@ -1,11 +1,12 @@
 package com.ib.Tim25_IB.services;
 
+import com.ib.Tim25_IB.DTOs.ActivationDTO;
+import com.ib.Tim25_IB.DTOs.NewPasswordDTO;
 import com.ib.Tim25_IB.Repository.UserRepository;
 import com.ib.Tim25_IB.DTOs.UserLoginRequestDTO;
 import com.ib.Tim25_IB.DTOs.UserRequestDTO;
 import com.ib.Tim25_IB.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -18,8 +19,10 @@ public class UserService {
 //    public BCryptPasswordEncoder passwordEncoderUser() {
 //        return new BCryptPasswordEncoder();
 //    }
-    public void createUser(UserRequestDTO requestDTO) throws IOException {
+    public void createUser(UserRequestDTO requestDTO, int code) throws IOException {
         User user = new User(requestDTO);
+        user.setActivated(false);
+        user.setCode(code);
 //        user.setPassword(passwordEncoderUser().encode(user.getPassword()));
         userRepository.save(user);
         userRepository.flush();
@@ -34,13 +37,23 @@ public class UserService {
 
     public boolean loginUser(UserLoginRequestDTO requestDTO) throws IOException {
         Optional<User> found = Optional.ofNullable(userRepository.findByEmail(requestDTO.getEmail()));
+
         if(found.isPresent() && found.get().getPassword().equals(requestDTO.getPassword())){
-            return true;
+            if(found.get().isActivated()){
+                return true;
+            }else{
+                return  false;
+            }
         }else{
             return false;
         }
     }
 
+    public User findByEmail(String email){
+        Optional<User> found = Optional.ofNullable(userRepository.findByEmail(email));
+        return found.orElse(null);
+    }
+    
     public boolean isUserAdmin(String email){
         return userRepository.findByEmail(email).isAdmin();
     }
@@ -49,5 +62,33 @@ public class UserService {
     }
 
     public void processCertificate() {
+    }
+
+    public boolean activateAccount(ActivationDTO activation) {
+        Optional<User> found = Optional.ofNullable(userRepository.findByEmail(activation.getEmail()));
+        if(found.isPresent() && found.get().getCode() == activation.getCode()){
+            User user = found.get();
+            user.setActivated(true);
+            user.setCode(0);
+            userRepository.save(user);
+            userRepository.flush();
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean recoverPassword(NewPasswordDTO request) {
+        User user  = findByEmail(request.getEmail());
+        if(user == null || !user.getPassword().equals(request.getOldPassword()) || !request.getNewPassword().equals(request.getPasswordConfirmation())){
+            return false;
+        }else{
+            user.setPassword(request.getNewPassword());
+            userRepository.save(user);
+            userRepository.flush();
+            return true;
+        }
+
+
     }
 }
