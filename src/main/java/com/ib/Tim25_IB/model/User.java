@@ -22,6 +22,13 @@ public class User {
     @Column(nullable = false)
     private boolean isAdmin;
 
+    @Column(nullable = false)
+    private boolean activated;
+
+    @Column
+    private int code;
+
+
     public User() {
     }
 
@@ -94,6 +101,22 @@ public class User {
 
     public boolean isAdmin() {
         return isAdmin;
+    }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public void setAdmin(boolean admin) {
