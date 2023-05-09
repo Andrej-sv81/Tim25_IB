@@ -7,7 +7,6 @@ import com.ib.Tim25_IB.DTOs.UserLoginRequestDTO;
 import com.ib.Tim25_IB.DTOs.UserRequestDTO;
 import com.ib.Tim25_IB.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -53,6 +52,10 @@ public class UserService {
     public User findByEmail(String email){
         Optional<User> found = Optional.ofNullable(userRepository.findByEmail(email));
         return found.orElse(null);
+    }
+    
+    public boolean isUserAdmin(String email){
+        return userRepository.findByEmail(email).isAdmin();
     }
 
     public void getRequests() {
