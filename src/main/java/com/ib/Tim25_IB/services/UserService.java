@@ -80,7 +80,7 @@ public class UserService {
 
     public boolean recoverPassword(NewPasswordDTO request) {
         User user  = findByEmail(request.getEmail());
-        if(user == null || !user.getPassword().equals(request.getOldPassword()) || !request.getNewPassword().equals(request.getPasswordConfirmation())){
+        if(user == null  || !request.getNewPassword().equals(request.getPasswordConfirmation())){
             return false;
         }else{
             user.setPassword(request.getNewPassword());

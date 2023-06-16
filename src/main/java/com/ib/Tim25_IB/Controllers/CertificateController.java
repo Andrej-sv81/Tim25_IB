@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -67,8 +69,20 @@ public class CertificateController {
     // VALIDATE A CERTIFICATE WITH ITS ID
     @PostMapping(value = "/validate", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> validateCertificate(@RequestBody CertIdDTO id){
-        boolean valid = true;//certificateService.validateCertificate(id.getSerialNumber());
+        boolean valid = false;
+        try {
+            Certificate cert = certificateService.getOne(id.getSerialNumber());
+            Date nowDate = Date.from(Instant.from(LocalDateTime.now()));
+            if(cert.getValidTo().after(nowDate)){
+                valid = true;
+            }
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
         return new ResponseEntity<Boolean>(valid, HttpStatus.OK);
     }
+
+
 
 }

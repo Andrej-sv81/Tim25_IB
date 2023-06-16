@@ -76,7 +76,7 @@ public class RequestControlller {
         }
     }
     //ACCEPT/DENY REQUEST
-    @PutMapping(value="/respond")
+    @PutMapping(value="/respond") // provjera da li je korisnik vlasnik certifikata
     public ResponseEntity<CertificateRequest> processRequest(@RequestBody RequestStatusChange requestStatusChange){
         CertificateRequest certificateRequest = new CertificateRequest();
         if(requestStatusChange.getStatusChange().equals("DENIED")){

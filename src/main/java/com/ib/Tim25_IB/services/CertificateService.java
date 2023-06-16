@@ -33,9 +33,5 @@ public class CertificateService {
         return certificate;
     }
 
-    public void validateCertificate(String id) {
-        //call repo to validate
-        //get the valid state of the cert with the matching id
-    }
 
 }

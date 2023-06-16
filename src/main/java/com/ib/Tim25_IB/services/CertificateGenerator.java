@@ -149,7 +149,7 @@ public class CertificateGenerator {
         currentKeyPair = generateKeyPair(4096);
 
         X509v3CertificateBuilder certificateBuilder = new JcaX509v3CertificateBuilder(
-                issuerCertificate == null ? subjectText : new JcaX509CertificateHolder(issuerCertificate).getSubject(),
+                issuerCertificate == null ? subjectText : new X500Name("CN=" +(new JcaX509CertificateHolder(issuerCertificate).getSerialNumber()).toString()), //serialnum to string umjesto CN-a jer pogresno psotavlja cn negdje prijem, tako da je uvijek admin
                 new BigInteger(Long.toString(System.currentTimeMillis() + SecureRandom.getInstanceStrong().nextLong())),
                 new Date(),
                 validTo,

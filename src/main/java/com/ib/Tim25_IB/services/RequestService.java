@@ -52,6 +52,7 @@ public class RequestService {
             certificateRequest.setStatus(RequestStatus.ACCEPTED);
             requestRepository.save(certificateRequest);
             return certificateRequest;
+            //napravi novi cert
         }
         return null;
     }
