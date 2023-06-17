@@ -110,4 +110,38 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PostMapping(value="/login/auth",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> loginUserAuth(@RequestBody UserLoginRequestAuthDTO request) throws IOException {
+
+        boolean check = userService.loginUserAuth(request);
+        //check active
+        if (check)
+            return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping(value = "/login/send", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> sendLoginAuth(@RequestBody EmailDTO email){
+        User user = userService.findByEmail(email.getEmail());
+        if(user != null && user.isActivated() && user.getCode()==0){
+            Random random = new Random();
+            int randomNumber = random.nextInt(900000) + 100000;
+            user.setCode(randomNumber);
+            userRepository.save(user); //TODO za finalnu odbranu prebaciti u servis da ne koristimo repo u kontroleru
+            userRepository.flush();
+            String url = "http://localhost:4200/password";
+
+            String body = "Hello,\n"
+                    + "Your login code is: \n"
+                    + "\n" + randomNumber + "\n\n";
+
+            String subject = "Login 2 factor authentication";
+            EmailDetails details = new EmailDetails(user.getEmail(), body, subject);
+            emailService.sendSimpleMail(details);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

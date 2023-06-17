@@ -1,10 +1,7 @@
 package com.ib.Tim25_IB.services;
 
-import com.ib.Tim25_IB.DTOs.ActivationDTO;
-import com.ib.Tim25_IB.DTOs.NewPasswordDTO;
+import com.ib.Tim25_IB.DTOs.*;
 import com.ib.Tim25_IB.Repository.UserRepository;
-import com.ib.Tim25_IB.DTOs.UserLoginRequestDTO;
-import com.ib.Tim25_IB.DTOs.UserRequestDTO;
 import com.ib.Tim25_IB.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -90,5 +87,21 @@ public class UserService {
         }
 
 
+    }
+
+    public boolean loginUserAuth(UserLoginRequestAuthDTO request) {
+        Optional<User> found = Optional.ofNullable(userRepository.findByEmail(request.getEmail()));
+
+        if(found.isPresent() && found.get().getPassword().equals(request.getPassword())){
+            if(found.get().isActivated() && found.get().getCode() == request.getCode()){
+                found.get().setCode(0);
+                userRepository.save(found.get());
+                return true;
+            }else{
+                return  false;
+            }
+        }else{
+            return false;
+        }
     }
 }

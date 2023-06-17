@@ -28,9 +28,18 @@ public class CertificateService {
         return certificateList;
     }
 
+    public List<Certificate> revokeAll(List<Certificate> list) throws IOException {
+        return certificateRepository.revokeAll(list);
+    }
+
     public Certificate getOne(String serialNumber) throws IOException{
         Certificate certificate = certificateRepository.findBySerialNumber(serialNumber);
         return certificate;
+    }
+
+    public List<Certificate> getAllBySN(String serialNumber) throws IOException {
+        List<Certificate> certificateList = certificateRepository.getAllCertificatesSN(serialNumber);
+        return certificateList;
     }
 
 

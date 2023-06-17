@@ -3,6 +3,7 @@ package com.ib.Tim25_IB.Repository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ib.Tim25_IB.model.Certificate;
+import com.ib.Tim25_IB.model.CertificateStatus;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
@@ -21,6 +22,37 @@ public class CertificateRepository {
             return new ArrayList<>();
         }
         return objectMapper.readValue(file, new TypeReference<List<Certificate>>() {});
+    }
+
+    public List<Certificate> getAllCertificatesSN(String serialNumber) throws IOException {
+        File file = new File("./src/main/resources/certificate.json");
+        if (!file.exists()) {
+            return new ArrayList<>();
+        }
+        List<Certificate> all =  objectMapper.readValue(file, new TypeReference<List<Certificate>>() {});
+        List<Certificate> returnList = new ArrayList<>();
+        for(Certificate cert: all){
+            if(cert.getIssuer() != null) {
+                if (cert.getIssuer().equals(serialNumber)) {
+                    returnList.add(cert);
+                }
+            }
+        }
+        List<Certificate> value = new ArrayList<>();
+        value.addAll(returnList);
+        for(Certificate cert: returnList){
+            if(cert.getIssuer()!=null) {
+                for (Certificate cert2 : all) {
+                    if (cert2.getIssuer() != null) {
+                        if(cert.getSerialNumber().equals(cert2.getIssuer())){
+                            value.add(cert2);
+                        }
+                    }
+                }
+            }
+        }
+
+        return value;
     }
 
     public void save(Certificate certificate) throws IOException {
@@ -43,5 +75,15 @@ public class CertificateRepository {
             }
         }
         return null;
+    }
+
+    public List<Certificate> revokeAll(List<Certificate> list) throws IOException {
+        for(Certificate cert: list){
+            cert.setCertificateStatus(CertificateStatus.NOTVALID);
+
+        }
+
+        saveAll(list);
+        return list;
     }
 }

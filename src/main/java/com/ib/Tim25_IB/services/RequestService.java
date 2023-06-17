@@ -58,7 +58,12 @@ public class RequestService {
     }
 
     public RequestListDTO getAll(String email) {
-        List<CertificateRequest> requestList = requestRepository.findAllBySubjectUsername(email);
+        List<CertificateRequest> requestList = null;
+        if(email.equals("admin")){
+            requestList = requestRepository.findAll();
+        }else{
+            requestList = requestRepository.findAllBySubjectUsername(email);
+        }
         if(requestList != null){
             return new RequestListDTO(requestList.size(), requestList);
         }else{
